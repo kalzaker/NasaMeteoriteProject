@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36109.1 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NasaMeteoriteService", "NasaMeteoriteService.csproj", "{37E4E6F4-26B9-4483-97E3-F2F75619D213}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{37E4E6F4-26B9-4483-97E3-F2F75619D213}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37E4E6F4-26B9-4483-97E3-F2F75619D213}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37E4E6F4-26B9-4483-97E3-F2F75619D213}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37E4E6F4-26B9-4483-97E3-F2F75619D213}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9F614D23-172E-421C-842A-F1A7449166F3}
+	EndGlobalSection
+EndGlobal
