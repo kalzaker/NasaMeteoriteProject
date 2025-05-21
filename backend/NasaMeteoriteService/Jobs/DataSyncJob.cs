@@ -52,7 +52,6 @@ namespace NasaMeteoriteService.Jobs
                 {
                     if (existingDict.TryGetValue(dto.Id, out var existingMeteorite))
                     {
-                        // Обновляем при изменении
                         if (IsDifferent(existingMeteorite, dto))
                         {
                             UpdateEntity(existingMeteorite, dto);
@@ -60,12 +59,10 @@ namespace NasaMeteoriteService.Jobs
                     }
                     else
                     {
-                        // Добавляем новое
                         _dbContext.Meteorites.Add(ToEntity(dto));
                     }
                 }
 
-                // Удаление отсутствующих (опционально)
                 var toRemove = existing.Where(m => !incomingIds.Contains(m.NasaId)).ToList();
                 _dbContext.Meteorites.RemoveRange(toRemove);
 

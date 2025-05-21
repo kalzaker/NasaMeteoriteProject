@@ -16,6 +16,13 @@ namespace NasaMeteoriteService.Controllers
             _dbContext = dbContext;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var meteorites = await _dbContext.Meteorites.ToListAsync();
+            return Ok(meteorites);
+        }
+
         [HttpGet("filtered")]
         public async Task<IActionResult> GetFilteredGroupedMeteorites(
             [FromQuery] int? yearFrom,
@@ -38,32 +45,6 @@ namespace NasaMeteoriteService.Controllers
 
             if (!string.IsNullOrWhiteSpace(nameContains))
                 query = query.Where(m => m.Name.ToLower().Contains(nameContains.ToLower()));
-
-            var test = await query
-            .Where(m => (m.Year.Value.Year < 1000 || m.Year.Value.Year > 3000))
-               .ToListAsync();
-
-            if (test.Any())
-            {
-                return BadRequest(new
-                {
-                    Error = "Некорректные значения года",
-                    ProblematicEntries = test.Select(m => new { m.Name, m.Year })
-                });
-            }
-
-            var massTest = await query
-    .Where(m => m.Mass > int.MaxValue)
-    .ToListAsync();
-
-            if (massTest.Any())
-            {
-                return BadRequest(new
-                {
-                    Error = "Слишком большие значения массы",
-                    ProblematicEntries = massTest.Select(m => new { m.Name, m.Mass })
-                });
-            }
 
             var grouped = await query
                 .Where(m => m.Year.HasValue)
