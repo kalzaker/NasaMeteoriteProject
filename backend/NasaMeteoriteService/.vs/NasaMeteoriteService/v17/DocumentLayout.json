@@ -3,32 +3,12 @@
   "WorkspaceRootPath": "D:\\VSProjects\\NasaMeteoriteProject\\backend\\NasaMeteoriteService\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{37E4E6F4-26B9-4483-97E3-F2F75619D213}|NasaMeteoriteService.csproj|d:\\vsprojects\\nasameteoriteproject\\backend\\nasameteoriteservice\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{37E4E6F4-26B9-4483-97E3-F2F75619D213}|NasaMeteoriteService.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{37E4E6F4-26B9-4483-97E3-F2F75619D213}|NasaMeteoriteService.csproj|d:\\vsprojects\\nasameteoriteproject\\backend\\nasameteoriteservice\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{37E4E6F4-26B9-4483-97E3-F2F75619D213}|NasaMeteoriteService.csproj|solutionrelative:data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{37E4E6F4-26B9-4483-97E3-F2F75619D213}|NasaMeteoriteService.csproj|d:\\vsprojects\\nasameteoriteproject\\backend\\nasameteoriteservice\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
       "RelativeMoniker": "D:0:0:{37E4E6F4-26B9-4483-97E3-F2F75619D213}|NasaMeteoriteService.csproj|solutionrelative:properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{37E4E6F4-26B9-4483-97E3-F2F75619D213}|NasaMeteoriteService.csproj|d:\\vsprojects\\nasameteoriteproject\\backend\\nasameteoriteservice\\models\\meteorite.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{37E4E6F4-26B9-4483-97E3-F2F75619D213}|NasaMeteoriteService.csproj|solutionrelative:models\\meteorite.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{37E4E6F4-26B9-4483-97E3-F2F75619D213}|NasaMeteoriteService.csproj|d:\\vsprojects\\nasameteoriteproject\\backend\\nasameteoriteservice\\jobs\\datasyncjob.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{37E4E6F4-26B9-4483-97E3-F2F75619D213}|NasaMeteoriteService.csproj|solutionrelative:jobs\\datasyncjob.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{37E4E6F4-26B9-4483-97E3-F2F75619D213}|NasaMeteoriteService.csproj|d:\\vsprojects\\nasameteoriteproject\\backend\\nasameteoriteservice\\controllers\\meteoritescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{37E4E6F4-26B9-4483-97E3-F2F75619D213}|NasaMeteoriteService.csproj|solutionrelative:controllers\\meteoritescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{37E4E6F4-26B9-4483-97E3-F2F75619D213}|NasaMeteoriteService.csproj|d:\\vsprojects\\nasameteoriteproject\\backend\\nasameteoriteservice\\models\\meteoritedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{37E4E6F4-26B9-4483-97E3-F2F75619D213}|NasaMeteoriteService.csproj|solutionrelative:models\\meteoritedto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{37E4E6F4-26B9-4483-97E3-F2F75619D213}|NasaMeteoriteService.csproj|d:\\vsprojects\\nasameteoriteproject\\backend\\nasameteoriteservice\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{37E4E6F4-26B9-4483-97E3-F2F75619D213}|NasaMeteoriteService.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,97 +18,32 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "launchSettings.json",
               "DocumentMoniker": "D:\\VSProjects\\NasaMeteoriteProject\\backend\\NasaMeteoriteService\\Properties\\launchSettings.json",
               "RelativeDocumentMoniker": "Properties\\launchSettings.json",
               "ToolTip": "D:\\VSProjects\\NasaMeteoriteProject\\backend\\NasaMeteoriteService\\Properties\\launchSettings.json",
               "RelativeToolTip": "Properties\\launchSettings.json",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAABoAAAAZAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACwAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-05-20T22:49:33.195Z",
+              "WhenOpened": "2025-05-22T23:05:43.294Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "AppDbContext.cs",
-              "DocumentMoniker": "D:\\VSProjects\\NasaMeteoriteProject\\backend\\NasaMeteoriteService\\Data\\AppDbContext.cs",
-              "RelativeDocumentMoniker": "Data\\AppDbContext.cs",
-              "ToolTip": "D:\\VSProjects\\NasaMeteoriteProject\\backend\\NasaMeteoriteService\\Data\\AppDbContext.cs",
-              "RelativeToolTip": "Data\\AppDbContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-20T21:30:24.279Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "MeteoritesController.cs",
-              "DocumentMoniker": "D:\\VSProjects\\NasaMeteoriteProject\\backend\\NasaMeteoriteService\\Controllers\\MeteoritesController.cs",
-              "RelativeDocumentMoniker": "Controllers\\MeteoritesController.cs",
-              "ToolTip": "D:\\VSProjects\\NasaMeteoriteProject\\backend\\NasaMeteoriteService\\Controllers\\MeteoritesController.cs",
-              "RelativeToolTip": "Controllers\\MeteoritesController.cs",
-              "ViewState": "AgIAADsAAAAAAAAAAAAgwBEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-20T14:20:48.205Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "MeteoriteDto.cs",
-              "DocumentMoniker": "D:\\VSProjects\\NasaMeteoriteProject\\backend\\NasaMeteoriteService\\Models\\MeteoriteDto.cs",
-              "RelativeDocumentMoniker": "Models\\MeteoriteDto.cs",
-              "ToolTip": "D:\\VSProjects\\NasaMeteoriteProject\\backend\\NasaMeteoriteService\\Models\\MeteoriteDto.cs",
-              "RelativeToolTip": "Models\\MeteoriteDto.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAoAAAAaAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-20T13:54:40.286Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\VSProjects\\NasaMeteoriteProject\\backend\\NasaMeteoriteService\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "D:\\VSProjects\\NasaMeteoriteProject\\backend\\NasaMeteoriteService\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAACcAAAAAAAAAAAAAADEAAAAYAAAAAAAAAA==",
+              "ViewState": "AgIAADkAAAAAAAAAAAAAAEYAAAAWAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-19T22:43:44.892Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "DataSyncJob.cs",
-              "DocumentMoniker": "D:\\VSProjects\\NasaMeteoriteProject\\backend\\NasaMeteoriteService\\Jobs\\DataSyncJob.cs",
-              "RelativeDocumentMoniker": "Jobs\\DataSyncJob.cs",
-              "ToolTip": "D:\\VSProjects\\NasaMeteoriteProject\\backend\\NasaMeteoriteService\\Jobs\\DataSyncJob.cs",
-              "RelativeToolTip": "Jobs\\DataSyncJob.cs",
-              "ViewState": "AgIAAHUAAAAAAAAAAAAowEAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-19T22:34:29.071Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Meteorite.cs",
-              "DocumentMoniker": "D:\\VSProjects\\NasaMeteoriteProject\\backend\\NasaMeteoriteService\\Models\\Meteorite.cs",
-              "RelativeDocumentMoniker": "Models\\Meteorite.cs",
-              "ToolTip": "D:\\VSProjects\\NasaMeteoriteProject\\backend\\NasaMeteoriteService\\Models\\Meteorite.cs",
-              "RelativeToolTip": "Models\\Meteorite.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABEAAAAYAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-19T21:45:06.62Z",
+              "WhenOpened": "2025-05-22T22:38:35.778Z",
               "EditorCaption": ""
             }
           ]

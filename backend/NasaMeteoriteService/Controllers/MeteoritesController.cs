@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using NasaMeteoriteService.Data;
-using NasaMeteoriteService.Models;
+using NasaMeteoriteSomeServices.Services.Interfaces;
+
 
 namespace NasaMeteoriteService.Controllers
 {
@@ -9,17 +8,17 @@ namespace NasaMeteoriteService.Controllers
     [Route("api/[controller]")]
     public class MeteoritesController : ControllerBase
     {
-        private readonly AppDbContext _dbContext;
+        private readonly IMeteoriteService _meteoriteService;
 
-        public MeteoritesController(AppDbContext dbContext)
+        public MeteoritesController(IMeteoriteService meteoriteService)
         {
-            _dbContext = dbContext;
+            _meteoriteService = meteoriteService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var meteorites = await _dbContext.Meteorites.ToListAsync();
+            var meteorites = await _meteoriteService.GetAllAsync();
             return Ok(meteorites);
         }
 
@@ -29,42 +28,12 @@ namespace NasaMeteoriteService.Controllers
             [FromQuery] int? yearTo,
             [FromQuery] string? recclass,
             [FromQuery] string? nameContains,
-            [FromQuery] string sortBy = "year" // year, count, mass
-        )
+            [FromQuery] string sortBy = "year")
         {
-            var query = _dbContext.Meteorites.AsQueryable();
+            var result = await _meteoriteService.GetFilteredGroupedMeteoritesAsync(
+                yearFrom, yearTo, recclass, nameContains, sortBy);
 
-            if (yearFrom.HasValue)
-                query = query.Where(m => m.Year.HasValue && m.Year.Value.Year >= yearFrom.Value);
-
-            if (yearTo.HasValue)
-                query = query.Where(m => m.Year.HasValue && m.Year.Value.Year <= yearTo.Value);
-
-            if (!string.IsNullOrWhiteSpace(recclass))
-                query = query.Where(m => m.Recclass == recclass);
-
-            if (!string.IsNullOrWhiteSpace(nameContains))
-                query = query.Where(m => m.Name.ToLower().Contains(nameContains.ToLower()));
-
-            var grouped = await query
-                .Where(m => m.Year.HasValue)
-                .GroupBy(m => m.Year.Value.Year)
-                .Select(g => new
-                {
-                    Year = g.Key,
-                    Count = g.Count(),
-                    TotalMass = g.Sum(m => m.Mass ?? 0)
-                })
-                .ToListAsync();
-
-            grouped = sortBy.ToLower() switch
-            {
-                "count" => grouped.OrderByDescending(g => g.Count).ToList(),
-                "mass" => grouped.OrderByDescending(g => g.TotalMass).ToList(),
-                _ => grouped.OrderBy(g => g.Year).ToList()
-            };
-
-            return Ok(grouped);
+            return Ok(result);
         }
     }
 }

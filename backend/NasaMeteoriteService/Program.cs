@@ -1,9 +1,14 @@
 using Microsoft.EntityFrameworkCore;
-using NasaMeteoriteService.Data;
-using NasaMeteoriteService.Jobs;
+using Microsoft.AspNetCore.SpaServices.Extensions;
+using NasaMeteoriteService.Handlers;
+using NasaMeteoriteSomeServices.Services.Implementations;
+using NasaMeteoriteSomeServices.Services.Interfaces;
 using Quartz;
+using Shared.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
 
 builder.Services.AddCors(options =>
 {
@@ -15,17 +20,27 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddHttpClient();
 
 builder.Services.AddControllers();
-
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IMeteoriteRepository, MeteoriteRepository>();
+builder.Services.AddScoped<IMeteoriteSyncService, MeteoriteSyncService>();
+builder.Services.AddScoped<IMeteoriteService, MeteoriteService>();
+builder.Services.AddScoped<MeteoriteDomainService>();
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
+builder.Services.AddSpaStaticFiles(configuration =>
+{
+    configuration.RootPath = "wwwroot";
+});
 
 builder.Services.AddQuartz(q =>
 {
@@ -49,11 +64,18 @@ var app = builder.Build();
 
 app.UseCors("AllowAll");
 
-if (app.Environment.IsDevelopment())
+app.UseExceptionHandler();
+app.UseSwagger();
+app.UseSwaggerUI();
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
+app.UseSpaStaticFiles();
+
+app.UseSpa(spa =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    spa.Options.SourcePath = "wwwroot";
+});
 
 app.MapControllers();
 
