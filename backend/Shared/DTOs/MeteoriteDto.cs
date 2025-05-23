@@ -1,8 +1,12 @@
-﻿namespace NasaMeteoriteService.Models
+﻿using Shared.Misc;
+
+namespace Shared.DTOs
 {
     public class MeteoriteDto
     {
+        [RequiredNotEmpty]
         public string Id { get; set; }
+        [RequiredNotEmpty]
         public string Name { get; set; }
         public string Nametype { get; set; }
         public string Recclass { get; set; }

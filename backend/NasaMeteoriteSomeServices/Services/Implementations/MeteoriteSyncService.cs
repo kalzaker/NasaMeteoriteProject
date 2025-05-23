@@ -1,119 +1,161 @@
 ﻿using Microsoft.Extensions.Logging;
-using NasaMeteoriteService.Models;
 using NasaMeteoriteSomeServices.Services.Interfaces;
-using System.Text.Json;
+using Shared.DTOs;
 using Shared.Models;
+using System.ComponentModel.DataAnnotations;
+using AutoMapper;
+using System.Text.Json;
 
 namespace NasaMeteoriteSomeServices.Services.Implementations
 {
     public class MeteoriteSyncService : IMeteoriteSyncService
     {
         private readonly IMeteoriteRepository _repository;
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly INasaApiClient _nasaApiClient;
+        private readonly IMapper _mapper;
         private readonly ILogger<MeteoriteSyncService> _logger;
 
         public MeteoriteSyncService(
             IMeteoriteRepository repository,
-            IHttpClientFactory httpClientFactory,
+            INasaApiClient nasaApiClient,
+            IMapper mapper,
             ILogger<MeteoriteSyncService> logger)
         {
             _repository = repository;
-            _httpClientFactory = httpClientFactory;
+            _nasaApiClient = nasaApiClient;
+            _mapper = mapper;
             _logger = logger;
         }
 
         public async Task SyncMeteoriteDataAsync()
         {
             _logger.LogInformation("Starting data sync...");
-
-            var httpClient = _httpClientFactory.CreateClient();
-            var response = await httpClient.GetStringAsync(Shared.Misc.SourceUrl.GetUrl());
-
-            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-            var nasaData = JsonSerializer.Deserialize<List<MeteoriteDto>>(response, options);
-
-            if (nasaData == null)
+            try
             {
-                _logger.LogWarning("No data received.");
-                return;
+                var nasaData = await _nasaApiClient.FetchMeteoriteDataAsync();
+                if (!nasaData.Any())
+                {
+                    _logger.LogWarning("No data received.");
+                    return;
+                }
+                await ProcessMeteoriteDataAsync(nasaData);
             }
+            catch (HttpRequestException ex)
+            {
+                _logger.LogError(ex, "Failed to fetch data from NASA API.");
+                throw;
+            }
+            catch (JsonException ex)
+            {
+                _logger.LogError(ex, "Failed to deserialize NASA API response.");
+                throw;
+            }
+            catch (ValidationException ex)
+            {
+                _logger.LogError(ex, "Data validation failed.");
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected error during sync.");
+                throw;
+            }
+        }
 
-            var existing = await _repository.GetAllAsync();
-            var existingDict = existing.ToDictionary(m => m.NasaId);
-            var incomingIds = new HashSet<string>(nasaData.Select(x => x.Id));
-
+        private async Task ProcessMeteoriteDataAsync(List<MeteoriteDto> nasaData)
+        {
+            var validData = new List<MeteoriteDto>();
             foreach (var dto in nasaData)
             {
-                if (existingDict.TryGetValue(dto.Id, out var entity))
+                var results = ValidateMeteoriteDto(dto);
+                if (!results.Any())
                 {
-                    if (IsDifferent(entity, dto))
-                    {
-                        UpdateEntity(entity, dto);
-                        _repository.Update(entity);
-                    }
+                    validData.Add(dto);
                 }
                 else
                 {
-                    var newEntity = ToEntity(dto);
-                    await _repository.AddAsync(newEntity);
+                    _logger.LogWarning("Invalid meteorite data: {Errors}", string.Join("; ", results.Select(r => r.ErrorMessage)));
                 }
             }
 
-            var toRemove = existing.Where(m => !incomingIds.Contains(m.NasaId)).ToList();
-            _repository.RemoveRange(toRemove);
+            if (!validData.Any())
+            {
+                _logger.LogWarning("No valid data after validation.");
+                return;
+            }
 
-            await _repository.SaveChangesAsync();
-            _logger.LogInformation("Sync done: Added/Updated = {0}, Removed = {1}",
-                nasaData.Count - existingDict.Count, toRemove.Count);
+            using var transaction = await _repository.BeginTransactionAsync();
+            try
+            {
+                var existingIds = await _repository.GetAllNasaIdsAsync();
+                var incomingIds = new HashSet<string>(validData.Select(x => x.Id));
+
+                var toAdd = new List<Meteorite>();
+                var toUpdate = new List<Meteorite>();
+
+                foreach (var dto in validData)
+                {
+                    if (!existingIds.Contains(dto.Id))
+                    {
+                        toAdd.Add(_mapper.Map<Meteorite>(dto));
+                    }
+                    else
+                    {
+                        var entity = await _repository.GetByNasaIdAsync(dto.Id);
+                        if (entity != null)
+                        {
+                            var mapped = _mapper.Map<Meteorite>(dto);
+                            if (!AreEntitiesEqual(entity, mapped))
+                            {
+                                _mapper.Map(dto, entity);
+                                toUpdate.Add(entity);
+                            }
+                        }
+                    }
+                }
+
+                var toRemove = existingIds.Except(incomingIds)
+                                         .Select(id => new Meteorite { NasaId = id })
+                                         .ToList();
+
+                if (toAdd.Any()) await _repository.AddRangeAsync(toAdd);
+                if (toUpdate.Any()) _repository.UpdateRange(toUpdate);
+                if (toRemove.Any()) _repository.RemoveRange(toRemove);
+
+                await _repository.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                _logger.LogInformation("Sync done: Added/Updated = {0}, Removed = {1}",
+                    validData.Count - existingIds.Count, toRemove.Count);
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                _logger.LogError(ex, "Sync failed, transaction rolled back.");
+                throw;
+            }
         }
 
-        private static bool IsDifferent(Meteorite entity, MeteoriteDto dto) =>
-            entity.Name != dto.Name ||
-            entity.Nametype != dto.Nametype ||
-            entity.Recclass != dto.Recclass ||
-            entity.Mass != TryParseFloat(dto.Mass) ||
-            entity.Fall != dto.Fall ||
-            entity.Year != TryParseDate(dto.Year) ||
-            entity.Reclat != TryParseFloat(dto.Reclat) ||
-            entity.Reclong != TryParseFloat(dto.Reclong) ||
-            entity.GeoLat != (dto.Geolocation?.Coordinates?.ElementAtOrDefault(1) ?? 0) ||
-            entity.GeoLong != (dto.Geolocation?.Coordinates?.ElementAtOrDefault(0) ?? 0);
-
-        private static void UpdateEntity(Meteorite e, MeteoriteDto d)
+        private static List<ValidationResult> ValidateMeteoriteDto(MeteoriteDto dto)
         {
-            e.Name = d.Name;
-            e.Nametype = d.Nametype;
-            e.Recclass = d.Recclass;
-            e.Mass = TryParseFloat(d.Mass);
-            e.Fall = d.Fall;
-            e.Year = TryParseDate(d.Year);
-            e.Reclat = TryParseFloat(d.Reclat);
-            e.Reclong = TryParseFloat(d.Reclong);
-            e.GeoLat = d.Geolocation?.Coordinates?.ElementAtOrDefault(1);
-            e.GeoLong = d.Geolocation?.Coordinates?.ElementAtOrDefault(0);
+            var results = new List<ValidationResult>();
+            var context = new ValidationContext(dto);
+            Validator.TryValidateObject(dto, context, results, true);
+            return results;
         }
 
-        private static Meteorite ToEntity(MeteoriteDto d) => new()
+        private static bool AreEntitiesEqual(Meteorite existing, Meteorite mapped)
         {
-            NasaId = d.Id,
-            Name = d.Name,
-            Nametype = d.Nametype,
-            Recclass = d.Recclass,
-            Mass = TryParseFloat(d.Mass),
-            Fall = d.Fall,
-            Year = TryParseDate(d.Year),
-            Reclat = TryParseFloat(d.Reclat),
-            Reclong = TryParseFloat(d.Reclong),
-            GeoLat = d.Geolocation?.Coordinates?.ElementAtOrDefault(1),
-            GeoLong = d.Geolocation?.Coordinates?.ElementAtOrDefault(0)
-        };
-
-        private static float? TryParseFloat(string? input) =>
-            float.TryParse(input, out var res) ? res : null;
-
-        private static DateTime? TryParseDate(string? input) =>
-            DateTime.TryParse(input, out var date)
-                ? DateTime.SpecifyKind(date, DateTimeKind.Utc)
-                : null;
+            return existing.NasaId == mapped.NasaId &&
+                   existing.Name == mapped.Name &&
+                   existing.Nametype == mapped.Nametype &&
+                   existing.Recclass == mapped.Recclass &&
+                   existing.Mass == mapped.Mass &&
+                   existing.Fall == mapped.Fall &&
+                   existing.Year == mapped.Year &&
+                   existing.Reclat == mapped.Reclat &&
+                   existing.Reclong == mapped.Reclong;
+        }
     }
 }
+    

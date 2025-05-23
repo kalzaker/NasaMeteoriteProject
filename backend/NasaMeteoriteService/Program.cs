@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.SpaServices.Extensions;
 using NasaMeteoriteService.Handlers;
 using NasaMeteoriteSomeServices.Services.Implementations;
 using NasaMeteoriteSomeServices.Services.Interfaces;
@@ -36,6 +35,10 @@ builder.Services.AddScoped<MeteoriteDomainService>();
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
+
+builder.Services.AddSingleton<INasaApiClient, NasaApiClient>();
+
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddSpaStaticFiles(configuration =>
 {

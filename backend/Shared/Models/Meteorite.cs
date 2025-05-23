@@ -17,7 +17,5 @@ namespace Shared.Models
         public DateTime? Year { get; set; }
         public float? Reclat { get; set; }
         public float? Reclong { get; set; }
-        public double? GeoLat { get; set; }
-        public double? GeoLong { get; set; }
     }
 }
